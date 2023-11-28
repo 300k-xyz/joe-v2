@@ -22,6 +22,7 @@ import {SafeCast} from "./libraries/math/SafeCast.sol";
 import {SampleMath} from "./libraries/math/SampleMath.sol";
 import {TreeMath} from "./libraries/math/TreeMath.sol";
 import {Uint256x256Math} from "./libraries/math/Uint256x256Math.sol";
+import "forge-std/console.sol";
 
 /**
  * @title Liquidity Book Pair
@@ -433,7 +434,8 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
         uint16 binStep = _binStep();
 
         uint24 id = parameters.getActiveId();
-
+        console.logString("============id");
+        console.logUint(id);
         parameters = parameters.updateReferences();
 
         while (true) {
@@ -463,6 +465,7 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
                 id = nextId;
             }
         }
+        console.logUint(amountOut);
 
         amountInLeft = amountsInLeft.decode(swapForY);
     }

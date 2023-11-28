@@ -376,6 +376,7 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
 
         parameters = parameters.updateReferences();
 
+
         while (true) {
             uint128 binReserves = _bins[id].decode(!swapForY);
             if (binReserves > 0) {
@@ -396,13 +397,15 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
 
                 amountIn += amountInWithoutFee + feeAmount;
                 amountOutLeft -= amountOutOfBin;
-
+                
                 fee += feeAmount;
             }
 
             if (amountOutLeft == 0) {
                 break;
             } else {
+                // use map<id, Reserve> to store this data
+                
                 uint24 nextId = _getNextNonEmptyBin(swapForY, id);
 
                 if (nextId == 0 || nextId == type(uint24).max) break;
@@ -436,13 +439,16 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
         uint24 id = parameters.getActiveId();
         console.logString("============id");
         console.logUint(id);
+        // ignore 
         parameters = parameters.updateReferences();
 
         while (true) {
             bytes32 binReserves = _bins[id];
             if (!binReserves.isEmpty(!swapForY)) {
+                // ignore
                 parameters = parameters.updateVolatilityAccumulator(id);
-
+                console.logString("====binReserves");
+                console.logUint(uint256(binReserves));
                 (bytes32 amountsInWithFees, bytes32 amountsOutOfBin, bytes32 totalFees) =
                     binReserves.getAmounts(parameters, binStep, swapForY, id, amountsInLeft);
 
@@ -450,7 +456,8 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
                     amountsInLeft = amountsInLeft.sub(amountsInWithFees);
 
                     amountOut += amountsOutOfBin.decode(!swapForY);
-
+                    console.logString("====amountOut");
+                    console.logUint(amountOut);
                     fee += totalFees.decode(swapForY);
                 }
             }
@@ -465,7 +472,7 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
                 id = nextId;
             }
         }
-        console.logUint(amountOut);
+        
 
         amountInLeft = amountsInLeft.decode(swapForY);
     }

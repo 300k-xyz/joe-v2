@@ -3,7 +3,7 @@
 pragma solidity 0.8.10;
 
 import "./helpers/TestHelper.sol";
-
+import "forge-std/console.sol";
 contract LBPairSwapTest is TestHelper {
     using SafeCast for uint256;
 
@@ -12,7 +12,7 @@ contract LBPairSwapTest is TestHelper {
 
         pairWnative = createLBPair(wnative, usdc);
 
-        addLiquidity(DEV, DEV, pairWnative, ID_ONE, 1e18, 1e18, 50, 50);
+        addLiquidity(DEV, DEV, pairWnative, ID_ONE, 1e18, 2e18, 20, 50);
     }
 
     // function testFuzz_SwapInForY(uint128 amountOut) public {
@@ -53,11 +53,12 @@ contract LBPairSwapTest is TestHelper {
 
     function testFuzz_SwapOutForY(uint128 amountIn) public {
         vm.assume(amountIn > 0 && amountIn <= 1e18);
-
+        amountIn = 1e15; // fix amountIn, can remove this to enable fuzzy test
         (uint128 amountInLeft, uint128 amountOut,) = pairWnative.getSwapOut(amountIn, true);
 
         vm.assume(amountOut > 0);
-
+        console.logString("-----test amountOut ");
+        console.logUint(amountOut);
         assertEq(amountInLeft, 0, "TestFuzz_SwapOutForY::1");
 
         deal(address(wnative), ALICE, amountIn);

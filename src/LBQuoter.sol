@@ -126,7 +126,6 @@ contract LBQuoter {
      */
     function findBestPathFromAmountIn(address[] calldata route, uint128 amountIn)
         public
-        view
         returns (Quote memory quote)
     {
         if (route.length < 2) {
@@ -252,7 +251,6 @@ contract LBQuoter {
      */
     function findBestPathFromAmountOut(address[] calldata route, uint128 amountOut)
         public
-        view
         returns (Quote memory quote)
     {
         if (route.length < 2) {

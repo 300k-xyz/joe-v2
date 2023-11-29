@@ -427,10 +427,21 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
      */
     function getSwapOut(uint128 amountIn, bool swapForY)
         external
-        view
         override
         returns (uint128 amountInLeft, uint128 amountOut, uint128 fee)
     {
+        //  uint128, uint128
+        //  uint256 , 256 / 8 = 32
+        //  amountIn = abcde20231232130
+        // 0000000000000000000abcde20231232130
+        // abcde202312321300000000000000000
+        // 0x1234 & 0x00ff = 0x0034
+
+        // 0x1234 >> 8 = 0x12
+        // 0x12 << 8 = 0x1200
+        // 1200 >> 8 = 0x12
+        
+        
         bytes32 amountsInLeft = amountIn.encode(swapForY);
 
         bytes32 parameters = _parameters;

@@ -179,7 +179,6 @@ contract LBRouter is ILBRouter {
      */
     function getSwapOut(ILBPair pair, uint128 amountIn, bool swapForY)
         external
-        view
         override
         returns (uint128 amountInLeft, uint128 amountOut, uint128 fee)
     {

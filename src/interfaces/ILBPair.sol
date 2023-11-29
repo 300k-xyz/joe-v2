@@ -145,7 +145,6 @@ interface ILBPair is ILBToken {
 
     function getSwapOut(uint128 amountIn, bool swapForY)
         external
-        view
         returns (uint128 amountInLeft, uint128 amountOut, uint128 fee);
 
     function swap(bool swapForY, address to) external returns (bytes32 amountsOut);

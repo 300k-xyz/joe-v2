@@ -12,7 +12,7 @@ import {PairParameterHelper} from "./PairParameterHelper.sol";
 import {FeeHelper} from "./FeeHelper.sol";
 import {PriceHelper} from "./PriceHelper.sol";
 import {TokenHelper} from "./TokenHelper.sol";
-
+import "forge-std/console.sol";
 /**
  * @title Liquidity Book Bin Helper Library
  * @author Trader Joe
@@ -226,15 +226,16 @@ library BinHelper {
         bool swapForY, // swap `swapForY` and `activeId` to avoid stack too deep
         uint24 activeId,
         bytes32 amountsInLeft
-    ) internal pure returns (bytes32 amountsInWithFees, bytes32 amountsOutOfBin, bytes32 totalFees) {
+    ) internal returns (bytes32 amountsInWithFees, bytes32 amountsOutOfBin, bytes32 totalFees) {
         uint256 price = activeId.getPriceFromId(binStep);
-
+        console.log("test==== getAmounts 12313");
         uint128 binReserveOut = binReserves.decode(!swapForY);
-
+        
         uint128 maxAmountIn = swapForY
             ? uint256(binReserveOut).shiftDivRoundUp(Constants.SCALE_OFFSET, price).safe128()
             : uint256(binReserveOut).mulShiftRoundUp(price, Constants.SCALE_OFFSET).safe128();
 
+        // hard code a number for totalFee in cpp for now. we will figure out how to calculate this later
         uint128 totalFee = parameters.getTotalFee(binStep);
         uint128 maxFee = maxAmountIn.getFeeAmount(totalFee);
 

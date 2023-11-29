@@ -42,6 +42,8 @@ library PackedUint128Math {
      */
     function encodeFirst(uint128 x1) internal pure returns (bytes32 z) {
         assembly {
+            //  13123213fdsfcbdef23423781237218 & 0xffffffffffffffffffffffffffffffff
+            // 0xfdsfdsfcbdef23423781237218
             z := and(x1, MASK_128)
         }
     }

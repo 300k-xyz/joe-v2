@@ -102,7 +102,7 @@ interface ILBPair is ILBToken {
 
     function getBin(uint24 id) external view returns (uint128 binReserveX, uint128 binReserveY);
 
-    function getNextNonEmptyBin(bool swapForY, uint24 id) external view returns (uint24 nextId);
+    function getNextNonEmptyBin(bool swapForY, uint24 id) external returns (uint24 nextId);
 
     function getProtocolFees() external view returns (uint128 protocolFeeX, uint128 protocolFeeY);
 

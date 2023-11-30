@@ -191,7 +191,7 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
      * @param id The id of the bin
      * @return nextId The id of the next non-empty bin
      */
-    function getNextNonEmptyBin(bool swapForY, uint24 id) external view override returns (uint24 nextId) {
+    function getNextNonEmptyBin(bool swapForY, uint24 id) external override returns (uint24 nextId) {
         nextId = _getNextNonEmptyBin(swapForY, id);
     }
 
@@ -448,18 +448,18 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
         uint16 binStep = _binStep();
 
         uint24 id = parameters.getActiveId();
-        console.logString("============id");
-        console.logUint(id);
         // ignore 
         parameters = parameters.updateReferences();
 
         while (true) {
             bytes32 binReserves = _bins[id];
+            // console.logString("====_getNextNonEmptyBin 1111");
+            // console.logUint(id);
+            // console.logUint(uint256(binReserves));
+
             if (!binReserves.isEmpty(!swapForY)) {
                 // ignore
                 parameters = parameters.updateVolatilityAccumulator(id);
-                console.logString("====binReserves");
-                console.logUint(uint256(binReserves));
                 (bytes32 amountsInWithFees, bytes32 amountsOutOfBin, bytes32 totalFees) =
                     binReserves.getAmounts(parameters, binStep, swapForY, id, amountsInLeft);
 
@@ -467,16 +467,24 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
                     amountsInLeft = amountsInLeft.sub(amountsInWithFees);
 
                     amountOut += amountsOutOfBin.decode(!swapForY);
-                    console.logString("====amountOut");
                     console.logUint(amountOut);
                     fee += totalFees.decode(swapForY);
+                    
+                    bytes32 pFees = totalFees.scalarMulDivBasisPointRoundDown(parameters.getProtocolShare());
+                    console.logString("====pFees 1111");
+                    console.logUint(uint256(pFees));
+                    if (pFees > 0) {
+                        amountsInWithFees = amountsInWithFees.sub(pFees);
+                    }
                 }
             }
-
+            
             if (amountsInLeft == 0) {
                 break;
             } else {
+                
                 uint24 nextId = _getNextNonEmptyBin(swapForY, id);
+               
 
                 if (nextId == 0 || nextId == type(uint24).max) break;
 

@@ -229,6 +229,7 @@ library BinHelper {
     ) internal returns (bytes32 amountsInWithFees, bytes32 amountsOutOfBin, bytes32 totalFees) {
         uint256 price = activeId.getPriceFromId(binStep);
         console.log("test==== getAmounts 12313");
+        console.logUint(activeId);
         uint128 binReserveOut = binReserves.decode(!swapForY);
         
         uint128 maxAmountIn = swapForY

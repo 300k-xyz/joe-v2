@@ -11,6 +11,10 @@ contract LBPairSwapTest is TestHelper {
         super.setUp();
 
         pairWnative = createLBPair(wnative, usdc);
+        // uint8 nbBinX = 6;
+        // uint8 nbBinY = 6;
+
+        // addLiquidity(ALICE, BOB, pairWnative, activeId, 100 * 10 ** 18, 2_000 * 10 ** 6, nbBinX, nbBinY);
 
         addLiquidity(DEV, DEV, pairWnative, ID_ONE, 1e18, 2e18, 20, 50);
     }
@@ -53,7 +57,7 @@ contract LBPairSwapTest is TestHelper {
 
     function testFuzz_SwapOutForY(uint128 amountIn) public {
         vm.assume(amountIn > 0 && amountIn <= 1e18);
-        amountIn = 1e15; // fix amountIn, can remove this to enable fuzzy test
+        amountIn = 2e18; // fix amountIn, can remove this to enable fuzzy test
         (uint128 amountInLeft, uint128 amountOut,) = pairWnative.getSwapOut(amountIn, true);
 
         vm.assume(amountOut > 0);

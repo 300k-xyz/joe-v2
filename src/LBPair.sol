@@ -469,13 +469,6 @@ contract LBPair is LBToken, ReentrancyGuard, Clone, ILBPair {
                     amountOut += amountsOutOfBin.decode(!swapForY);
                     console.logUint(amountOut);
                     fee += totalFees.decode(swapForY);
-                    
-                    bytes32 pFees = totalFees.scalarMulDivBasisPointRoundDown(parameters.getProtocolShare());
-                    console.logString("====pFees 1111");
-                    console.logUint(uint256(pFees));
-                    if (pFees > 0) {
-                        amountsInWithFees = amountsInWithFees.sub(pFees);
-                    }
                 }
             }
             
